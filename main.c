@@ -44,6 +44,7 @@ int main() {
     
     // keysPredict - crear un diccionario
     keysPredictAddWord(kt, "papanatas");
+	
     keysPredictAddWord(kt, "zanahoria");
     keysPredictAddWord(kt, "oreja");
     keysPredictAddWord(kt, "ricardo");
@@ -56,9 +57,9 @@ int main() {
     keysPredictAddWord(kt, "abfgato");
     keysPredictAddWord(kt, "bebe");
     keysPredictAddWord(kt, "pata");
-	/*
-    keysPredictPrint(kt);
 	
+    keysPredictPrint(kt);
+	/*
     // keysPredict - listar todas las palabras
     char** words;
     int wordsCount;
