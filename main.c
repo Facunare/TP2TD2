@@ -43,20 +43,12 @@ int main() {
     struct keysPredict* kt = keysPredictNew();
     
     // keysPredict - crear un diccionario
-    keysPredictAddWord(kt, "papanatas");
-	
-    keysPredictAddWord(kt, "zanahoria");
-    keysPredictAddWord(kt, "oreja");
-    keysPredictAddWord(kt, "ricardo");
-    keysPredictAddWord(kt, "zaz");
     keysPredictAddWord(kt, "a");
-    keysPredictAddWord(kt, "");
-    keysPredictAddWord(kt, "b");
-    keysPredictAddWord(kt, "ab");
-    keysPredictAddWord(kt, "abfff");
-    keysPredictAddWord(kt, "abfgato");
-    keysPredictAddWord(kt, "bebe");
-    keysPredictAddWord(kt, "pata");
+	
+    keysPredictAddWord(kt, "actor");
+	keysPredictAddWord(kt, "actuar");
+	keysPredictAddWord(kt, "sol");
+	keysPredictAddWord(kt, "sola");
 	
     keysPredictPrint(kt);
 	/*

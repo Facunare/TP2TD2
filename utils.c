@@ -34,14 +34,15 @@ struct keysPredict* keysPredictNew() {
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
 	
 	int index_palabra = 0;
-	struct node* p = kt->first;
+	struct node** pp = &(kt->first);
 
 	while(word[index_palabra] != NULL){
 		
-		struct node* founded = findNodeInLevel(&p, word[index_palabra]);
+		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
 		
 		if(founded==NULL){
-			founded = addSortedNewNodeInLevel(&p, word[index_palabra]);
+			kt->totalKeys++;
+			founded = addSortedNewNodeInLevel(pp, word[index_palabra]);
 		}
 		
 		if(index_palabra == strLen(word)-1){
@@ -49,9 +50,12 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 			founded->end = 1;
 		}
 		
-		p = founded->down;
+		pp = &(founded->down);
 		index_palabra++;
+		
 	}
+	
+	kt->totalWords++;
 }
 
 void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
@@ -142,17 +146,16 @@ void keysPredictPrintAux(struct node* n, int level) {
 // Auxiliar functions
 
 struct node* findNodeInLevel(struct node** list, char character) {
-	if (*list == NULL) {
+	struct node* temp = *list;
+	if (temp == NULL) {
 		return NULL;
 	}
-	struct node* temp = list;
-	while(temp->next != 0){
+	while(temp != NULL){
 		if(temp->character == character){
 			return temp;
 		}
 		temp = temp->next;
 	}
-	
 	return NULL;
 }
 
