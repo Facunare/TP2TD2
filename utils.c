@@ -37,19 +37,19 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 	struct node* p = kt->first;
 
 	while(word[index_palabra] != NULL){
-		p = findNodeInLevel(kt, word[index_palabra]);
-		if(p==NULL){
-			addSortedNewNodeInLevel(&kt->first,word[index_palabra]);
-		}else{
-			if(index_palabra == strLen(word)-1){
-				char* copia = strDup(word);
-				p->word = copia;
-				p->end = 1;
-			}else{
-				p = p->down;
-			};
+		
+		struct node* founded = findNodeInLevel(&p, word[index_palabra]);
+		
+		if(founded==NULL){
+			founded = addSortedNewNodeInLevel(&p, word[index_palabra]);
 		}
-			
+		
+		if(index_palabra == strLen(word)-1){
+			founded->word = strDup(word);
+			founded->end = 1;
+		}
+		
+		p = founded->down;
 		index_palabra++;
 	}
 }
@@ -142,6 +142,9 @@ void keysPredictPrintAux(struct node* n, int level) {
 // Auxiliar functions
 
 struct node* findNodeInLevel(struct node** list, char character) {
+	if (*list == NULL) {
+		return NULL;
+	}
 	struct node* temp = list;
 	while(temp->next != 0){
 		if(temp->character == character){
@@ -150,34 +153,37 @@ struct node* findNodeInLevel(struct node** list, char character) {
 		temp = temp->next;
 	}
 	
-	return 0;
+	return NULL;
 }
 
-struct node* addSortedNewNodeInLevel(struct node** list, char character) {
-	struct node* newNode = (struct node*)malloc(sizeof(struct node));
-	
-    newNode->character = character;
-	newNode->next = 0;
+struct node* addSortedNewNodeInLevel(struct node** list, char character){
+	struct node* newNode = (struct node*) malloc(sizeof(struct node));
 
-	if (*list == NULL || newNode->character < (*list)->character ) {
+	newNode->character = character;
+	newNode->next = 0;
+	newNode->end = 0;
+	newNode->word = 0;
+	newNode->down = 0;
+	
+	if(*list == NULL || (*list)->character > character){
 		newNode->next = *list;
-		*list = newNode;
-		
-	}else{
-		struct node* prox = *list;
-		struct node* prev = 0;
-		while(prox != NULL){
-			if(prox->character > newNode->character){
-				prev->next = newNode;
-				newNode->next = prox;
-				return;
-			}
-			prev = prox;
-			prox = prox->next;
-		}
+		*list = newNode;       
+		return newNode;
 	}
 	
-}
+	struct node* current = *list;
+	while (current->next != NULL && current->next->character < character) {
+		
+		current = current->next;
+	}
+	
+	newNode->next = current->next;
+	current->next = newNode;
+	
+	return newNode;
+	
+};
+	
 
 void deleteArrayOfWords(char** words, int wordsCount) {
 	for(int i = 0; i < wordsCount; i++){
