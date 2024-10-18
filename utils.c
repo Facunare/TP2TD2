@@ -61,40 +61,40 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
 
 	int index_palabra = 0;
-	char* lastChar = word[strLen(word)-1];
-	struct node* p = kt->first;
+	struct node** pp = &(kt->first);
 	while(word[index_palabra] != NULL){
-		p = findNodeInLevel(kt, word[index_palabra]);
-		if(strLen(word)==index_palabra && p->character == lastChar && p->end == 1){
-			p->end = 0;
-			p->word = 0;
+		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+		if((strLen(word)-1)==index_palabra && founded->end == 1){
+			free(founded->word);
+			founded->word = 0;
+			// preguntar si hay que hacer free(founded->word) o founded->word = 0;
+			founded->end = 0;
+			kt->totalWords--;
 		}
 		
-		p = p->down;
+		pp = &(founded->down);
 		index_palabra++;
 	}
 	
-    
 }
 
 struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 	int index_palabra = 0;
-	struct node* p = kt->first;
+	struct node** pp = &(kt->first);
 	while(word[index_palabra] != NULL){
-		p = findNodeInLevel(kt, word[index_palabra]);
-		if(p==NULL){
+		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+		if(founded==NULL){
 			return 0;
 		}else{
-			if(p->end == 1 && p->word == word){
-				return p;
+			if(founded->end == 1 && strcmp(founded->word, word) == 0){ // preguntar si podemos usar strcmp()
+				return founded;
 			}
-			p = p->down;
 		}
 		
-		
+		pp = &(founded->down);
 		index_palabra++;
 	}
-
+	
 }
 
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {

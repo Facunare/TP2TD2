@@ -44,16 +44,22 @@ int main() {
     
     // keysPredict - crear un diccionario
     keysPredictAddWord(kt, "a");
-	
     keysPredictAddWord(kt, "actor");
 	keysPredictAddWord(kt, "actuar");
+	keysPredictAddWord(kt, "actuara");
 	keysPredictAddWord(kt, "sol");
 	keysPredictAddWord(kt, "sola");
+	printf("%i", keysPredictFind(kt, "actuar"));
+	keysPredictPrint(kt);
+	keysPredictRemoveWord(kt, "actuar");
+	printf("%i", keysPredictFind(kt, "actuar"));
+	keysPredictPrint(kt);
+
+	printf("%i", keysPredictFind(kt, "solo"));
+
 	
-    keysPredictPrint(kt);
-	/*
-    // keysPredict - listar todas las palabras
-    char** words;
+	// keysPredict - listar todas las palabras
+    /*char** words;
     int wordsCount;
     words = keysPredictListAll(kt, &wordsCount);
     for(int i=0; i<wordsCount; i++) {
