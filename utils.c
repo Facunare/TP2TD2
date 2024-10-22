@@ -98,10 +98,42 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 }
 
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {
+	
+	int cont = 0;
+	int index_palabra = 0;
+	struct node** pp = &(kt->first);
+	struct node* founded = 0;
+	while(partialWord[index_palabra] != NULL){
+		founded = findNodeInLevel(pp, partialWord[index_palabra]);
+		pp = &(founded->down);
+		index_palabra++;
+		
+	}
 
-    // COMPLETAR
-
-    return 0;
+	struct node* level = *pp;
+	while(level != NULL){
+		struct node* current = level;
+		
+		while(current != NULL){
+			if(current->end == 1){
+				cont++;
+			};
+			
+			if (current->down != NULL) {
+				struct node* downNode = current->down;
+				while (downNode != NULL) {
+					if (downNode->end == 1) {
+						cont++;
+					};
+					downNode = downNode->next;
+				};
+			};
+			current = current->next;
+		};
+		
+		level = level->down;
+	}
+	printf("%i", cont);
 }
 
 int keysPredictCountWordAux(struct node* n) {
@@ -145,6 +177,7 @@ void keysPredictPrintAux(struct node* n, int level) {
 
 // Auxiliar functions
 
+// findNodeInLevel se encarga de comprobar si un nodo se encuentra presente en un nivel especifico
 struct node* findNodeInLevel(struct node** list, char character) {
 	struct node* temp = *list;
 	if (temp == NULL) {
@@ -159,6 +192,8 @@ struct node* findNodeInLevel(struct node** list, char character) {
 	return NULL;
 }
 
+// addSortedNewNodeInLevel se engarga de agregar un nodo en un nivel especifico segun orden alfabetico
+// (teniendo en cuenta el caso que el nodo sea el primero de la lista o si la lista se encontraba vacia)
 struct node* addSortedNewNodeInLevel(struct node** list, char character){
 	struct node* newNode = (struct node*) malloc(sizeof(struct node));
 

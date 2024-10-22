@@ -21,22 +21,51 @@ void findAndPrintAll(struct keysPredict* kt, char* word ) {
 
 int main() {
 
-    // COMPLETAR
-
-    // A Continuacion dejamos algunos ejemplos de como
-    // llamar a las funciones pedidas. Este codigo debe
-    // ser borrado / modificado.
-
     // strLen
     int len = strLen("hola");
-    printf("strDup(\"hola\") -> \"%i\"\n", len);
+    printf("strLen(\"hola\") -> \"%i\"\n", len);
     printf("\n");
-
+	int strVacio = strLen("");
+	printf("strLen(\"\") -> \"%i\"\n", strVacio);
+	printf("\n");
+	int strUnCaracter = strLen("h");
+	printf("strLen(\"h\") -> \"%i\"\n", strUnCaracter);
+	printf("\n");
+	int strAlfanumerico = strLen("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	printf("strLen(\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") -> \"%i\"\n", strAlfanumerico);
+	printf("\n");
+	int strConEspacios = strLen("a b c");
+	printf("strLen(\"a b c\") -> \"%i\"\n", strConEspacios);
+	printf("\n");
+	int strCharsEspeciales= strLen("a!b!c");
+	printf("strLen(\"a!b!c\") -> \"%i\"\n", strCharsEspeciales);
+	printf("\n");
+	
     // strDup
     char* dup = strDup("hola");
     printf("strDup(\"hola\") -> \"%s\"\n", dup);
     free(dup);
     printf("\n");
+	char* dupVacio = strDup("");
+	printf("strDup(\"\") -> \"%s\"\n", dupVacio);
+	free(dup);
+	printf("\n");
+	char* dupUnCaracter = strDup("h");
+	printf("strDup(\"h\") -> \"%s\"\n", dupUnCaracter);
+	free(dup);
+	printf("\n");
+	char* dupAlfanumerico = strDup("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	printf("strDup(\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") -> \"%s\"\n", dupAlfanumerico);
+	free(dup);
+	printf("\n");
+	char* dupConEspacios = strDup(" a b");
+	printf("strDup(\" a b\") -> \"%s\"\n", dupConEspacios);
+	free(dup);
+	printf("\n");
+	char* dupCharsEspeciales = strDup("a!b!");
+	printf("strDup(\"a!b!\") -> \"%s\"\n", dupCharsEspeciales);
+	free(dup);
+	printf("\n");
 	
 	
     // keysPredict
@@ -44,19 +73,23 @@ int main() {
     
     // keysPredict - crear un diccionario
     keysPredictAddWord(kt, "a");
-    keysPredictAddWord(kt, "actor");
-	keysPredictAddWord(kt, "actuar");
-	keysPredictAddWord(kt, "actuara");
-	keysPredictAddWord(kt, "sol");
-	keysPredictAddWord(kt, "sola");
+    keysPredictAddWord(kt, "ala");
+	keysPredictAddWord(kt, "ale");
+	keysPredictAddWord(kt, "bar");
+	keysPredictAddWord(kt, "casa");
+	keysPredictAddWord(kt, "la");
+	keysPredictAddWord(kt, "lo");
+	keysPredictAddWord(kt, "los");
+	keysPredictAddWord(kt, "papa");
+	keysPredictAddWord(kt, "papas");
+	keysPredictAddWord(kt, "pato");
+	keysPredictAddWord(kt, "patos");
 	printf("%i", keysPredictFind(kt, "actuar"));
-	keysPredictPrint(kt);
-	keysPredictRemoveWord(kt, "actuar");
-	printf("%i", keysPredictFind(kt, "actuar"));
-	keysPredictPrint(kt);
 
-	printf("%i", keysPredictFind(kt, "solo"));
-
+	keysPredictPrint(kt);
+	int* words = 0;
+	keysPredictRun(kt, "al", &words);
+	
 	
 	// keysPredict - listar todas las palabras
     /*char** words;
