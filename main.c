@@ -88,8 +88,8 @@ int main() {
 
 	keysPredictPrint(kt);
 	int* words = 0;
-	keysPredictRun(kt, "al", &words);
-	
+	char** found = keysPredictRun(kt, "a", &words);
+	printf("%i", words);
 	
 	// keysPredict - listar todas las palabras
     /*char** words;

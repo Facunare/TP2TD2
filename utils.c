@@ -109,31 +109,40 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 		index_palabra++;
 		
 	}
-
+	
+	char** foundWords = (char**)malloc(100 * sizeof(char*));
 	struct node* level = *pp;
 	while(level != NULL){
 		struct node* current = level;
 		
 		while(current != NULL){
 			if(current->end == 1){
-				cont++;
+				foundWords[*wordsCount] = current->word;
+				(*wordsCount)++; 
+				printf("%s\n", current->word);
 			};
 			
-			if (current->down != NULL) {
+			if (current->down != NULL ) {
 				struct node* downNode = current->down;
-				while (downNode != NULL) {
+				while (downNode != NULL ) {
 					if (downNode->end == 1) {
-						cont++;
+						foundWords[*wordsCount] = current->word;
+						printf("%s\n", current->word);
+						(*wordsCount)++; 
 					};
 					downNode = downNode->next;
 				};
 			};
+			
 			current = current->next;
 		};
 		
+		
 		level = level->down;
+		
+		
 	}
-	printf("%i", cont);
+	return foundWords;
 }
 
 int keysPredictCountWordAux(struct node* n) {
