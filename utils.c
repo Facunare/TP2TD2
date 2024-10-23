@@ -79,6 +79,7 @@ void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
 }
 
 struct node* keysPredictFind(struct keysPredict* kt, char* word) {
+	
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
 	while(word[index_palabra] != NULL){
@@ -99,10 +100,10 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {
 	
-	int cont = 0;
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
 	struct node* founded = 0;
+	
 	while(partialWord[index_palabra] != NULL){
 		founded = findNodeInLevel(pp, partialWord[index_palabra]);
 		pp = &(founded->down);
@@ -110,51 +111,51 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 		
 	}
 	
-	char** foundWords = (char**)malloc(100 * sizeof(char*));
-	struct node* level = *pp;
-	while(level != NULL){
-		struct node* current = level;
-		
-		while(current != NULL){
-			if(current->end == 1){
-				foundWords[*wordsCount] = current->word;
-				(*wordsCount)++; 
-				printf("%s\n", current->word);
-			};
-			
-			if (current->down != NULL ) {
-				struct node* downNode = current->down;
-				while (downNode != NULL ) {
-					if (downNode->end == 1) {
-						foundWords[*wordsCount] = current->word;
-						printf("%s\n", current->word);
-						(*wordsCount)++; 
-					};
-					downNode = downNode->next;
-				};
-			};
-			
-			current = current->next;
-		};
-		
-		
-		level = level->down;
-		
-		
+	if(founded->end){
+		(*wordsCount)++;
 	}
+	
+	int cont = 0;
+	*wordsCount = keysPredictCountWordAux(*pp, *wordsCount, 0);
+	char** foundWords = (char**)malloc(*wordsCount * sizeof(char*));
+	
+	if(founded->end){
+		foundWords[cont] = strdup(founded->word);
+		cont++;
+	}
+	keysPredictCountWordAux(*pp, cont, foundWords);
+	
 	return foundWords;
 }
 
-int keysPredictCountWordAux(struct node* n) {
-
-    // COMPLETAR
+int keysPredictCountWordAux(struct node* n, int cont, char** foundWords) {
+	struct node* current = n;
+	
+	while(current) {
+		if(current->end) {
+			
+			if(foundWords != NULL){
+				foundWords[cont] = strDup(current->word);	
+			}
+			cont++;
+		}
+		cont = keysPredictCountWordAux(current->down, cont, foundWords);
+		current = current->next;
+	}
+	
+	return cont;
 }
 
 char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
+	
+	struct node** pp = &(kt->first);
 
-    // COMPLETAR
+	*wordsCount = keysPredictCountWordAux(*pp, *wordsCount, 0);
+	char** foundWords = (char**)malloc(*wordsCount * sizeof(char*));
 
-    return 0;
+	keysPredictCountWordAux(*pp, 0, foundWords);
+	
+	return foundWords;
 }
 
 void keysPredictDelete(struct keysPredict* kt) {

@@ -84,21 +84,30 @@ int main() {
 	keysPredictAddWord(kt, "papas");
 	keysPredictAddWord(kt, "pato");
 	keysPredictAddWord(kt, "patos");
+	keysPredictAddWord(kt, "patoba");
+	keysPredictAddWord(kt, "patobica");
+	keysPredictAddWord(kt, "papanatas");
+	keysPredictAddWord(kt, "papalos");
 	printf("%i", keysPredictFind(kt, "actuar"));
 
 	keysPredictPrint(kt);
-	int* words = 0;
-	char** found = keysPredictRun(kt, "a", &words);
-	printf("%i", words);
+	
+	/*char** found = keysPredictRun(kt, "a", &words);
+	printf("%i\n", words);
+	for(int i=0; i<words; i++) {
+		printf("%s\n", found[i]);
+	}*/
 	
 	// keysPredict - listar todas las palabras
-    /*char** words;
-    int wordsCount;
-    words = keysPredictListAll(kt, &wordsCount);
+    
+    int wordsCount = 0;
+	char** words = keysPredictListAll(kt, &wordsCount);
+	printf("%i\n", wordsCount);
     for(int i=0; i<wordsCount; i++) {
         printf("%s\n", words[i]);
     }
-    
+	
+    /*
 	deleteArrayOfWords(words, wordsCount);
 	
     // keysPredict - encontrar palabras
