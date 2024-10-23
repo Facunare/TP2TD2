@@ -160,8 +160,22 @@ char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
 
 void keysPredictDelete(struct keysPredict* kt) {
 
-    // COMPLETAR
+	keysPredictDeleteAux()
 
+}
+
+void keysPredictDeleteAux(struct node* n, int level) {
+	if(!n) return;
+	struct node* current = n;
+	while(current) {
+		for(int i=0; i<level;i++) printf(" |   ");
+		if(current->end) {
+			wordsCount = keysPredictCountWordAux(current, 0, 0);
+			deleteArrayOfWords(current, wordsCount);
+		}
+		keysPredictPrintAux(current->down, level+1);
+		current = current->next;
+	}
 }
 
 void keysPredictPrint(struct keysPredict* kt) {
