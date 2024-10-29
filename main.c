@@ -71,11 +71,13 @@ int main() {
     // keysPredict
     struct keysPredict* kt = keysPredictNew();
     
-    // keysPredict - crear un diccionario
-    keysPredictAddWord(kt, "a");
+   // keysPredictAddWord 
+	keysPredictAddWord(kt, "");
+    keysPredictAddWord(kt, "a"); 
     keysPredictAddWord(kt, "ala");
 	keysPredictAddWord(kt, "ale");
 	keysPredictAddWord(kt, "bar");
+	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "la");
 	keysPredictAddWord(kt, "lo");
@@ -88,27 +90,65 @@ int main() {
 	keysPredictAddWord(kt, "patobica");
 	keysPredictAddWord(kt, "papanatas");
 	keysPredictAddWord(kt, "papalos");
-	printf("%i", keysPredictFind(kt, "actuar"));
-
+	keysPredictAddWord(kt, "australopitecus");
 	keysPredictPrint(kt);
 	
-	/*char** found = keysPredictRun(kt, "a", &words);
+	keysPredictFind(kt, "papas"); // comprobar si esta la palabra antes de ser eliminada
+	
+	// keysPredictRemoveWord
+	keysPredictRemoveWord(kt, "la");
+	keysPredictRemoveWord(kt, "lo");
+	keysPredictRemoveWord(kt, "los");
+	keysPredictRemoveWord(kt, "papa");
+	keysPredictRemoveWord(kt, "papas");
+	keysPredictRemoveWord(kt, "");
+	
+	keysPredictPrint(kt);
+	
+	keysPredictFind(kt, "papas"); // comprobar si esta la palabra despues de ser eliminada
+	keysPredictFind(kt, "australopitecus");
+	keysPredictFind(kt, "patobica");
+	keysPredictFind(kt, "hola");
+	keysPredictFind(kt, "boca");
+	keysPredictFind(kt, "");
+	keysPredictFind(kt, "river");
+	
+	// keysPredictRun	
+	int words = 0;
+	char** found = keysPredictRun(kt, "a", &words);
 	printf("%i\n", words);
 	for(int i=0; i<words; i++) {
 		printf("%s\n", found[i]);
-	}*/
+	}
 	
-	// keysPredict - listar todas las palabras
-    
-    int wordsCount = 0;
-	char** words = keysPredictListAll(kt, &wordsCount);
-	printf("%i\n", wordsCount);
-    for(int i=0; i<wordsCount; i++) {
-        printf("%s\n", words[i]);
-    }
-	
+
+	// keysPredictListAll
+	int wordsCount3 = 0;
+	char** words3 = keysPredictListAll(kt, &wordsCount3);
+	printf("%i\n", wordsCount3);
+	for(int i=0; i<wordsCount3; i++) {
+		printf("%s\n", words3[i]);
+	}
+	// keysPredict con una sola palabra
+	struct keysPredict* kt2 = keysPredictNew();
+	keysPredictAddWord(kt2, "hola");
+	keysPredictAddWord(kt2, "hola");
+	int wordsCount4 = 0;
+	char** words4 = keysPredictListAll(kt2, &wordsCount4);
+	printf("%i\n", wordsCount4);
+	for(int i=0; i<wordsCount4; i++) {
+		printf("%s\n", words4[i]);
+	}
+	/*
+	keysPredictPrint(kt2);
     /*
-	deleteArrayOfWords(words, wordsCount);
+	keysPredictDelete(kt);
+	printf("===\n");
+	keysPredictPrint(kt);
+	
+	printf("===\n");
+	
+	
 	
     // keysPredict - encontrar palabras
     findAndPrintAll(kt, "papa");
@@ -134,6 +174,6 @@ int main() {
 
     // keysPredict - borrar diccionario
     keysPredictDelete(kt);
-
-    return 0;*/
+*/
+    return 0;
 }
