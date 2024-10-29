@@ -1,6 +1,6 @@
 #include "utils.h"
 
-// strLen devuelve la longitud total de una cadena de caracteres
+// strLen devuelve la longitud total de una cadena de caracteres 
 int strLen(char* src) {
 	int contador = 0;
 	
@@ -38,8 +38,9 @@ struct keysPredict* keysPredictNew() {
 // keysPredictAddWord agrega una nueva palabra a la estructura kt
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
 	
-	if(strLen(word)==0){
-		return 0;
+	// chequea que no sea una cadena vacia.
+	if(strLen(word)==NULL){
+		return NULL;
 	}
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
@@ -73,8 +74,11 @@ void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
 
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
+	
+	// navega hasta el ultimo caracter de la palabra
 	while(word[index_palabra] != NULL){
 		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+		// si llego al final de la palabra, la borra.
 		if((strLen(word)-1)==index_palabra && founded->end == 1){
 			free(founded->word);
 			founded->word = 0;
@@ -96,13 +100,17 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
 
+	// navega hasta el ultimo caracter de la palabra
 	while(word[index_palabra] != NULL){
 		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+		
+		// si no se encuentre ALGUN caracter, no se encontró la palabra. Caso contrario, devuelve el puntero. 
 		if(founded==NULL){
 			return 0;
 		}else{
 			int equal = 1;
 			if(founded->end == 1){
+				// compara la palabra del nodo con la pasada por parametro
 				for(int i = 0; i<strLen(word); i++){
 					if(founded->word[i] != word[i]){
 						equal = 0;
@@ -136,6 +144,7 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 		
 	}
 	
+	// comprueba si el prefijo es una palabra
 	if(founded->end){
 		(*wordsCount)++;
 	}
@@ -152,7 +161,7 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 		cont++;
 	}
 	keysPredictCountWordAux(*pp, cont, foundWords);
-	;
+	
 	return foundWords;
 }
 
@@ -167,8 +176,6 @@ int keysPredictCountWordAux(struct node* n, int cont, char** foundWords) {
 				foundWords[cont] = strDup(current->word);	
 			}
 			cont++;
-			
-			
 		}
 		
 		// llamada recursiva para contar palabras en el nivel inferior al nodo actual
@@ -195,47 +202,26 @@ char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
 }
 
 void keysPredictDelete(struct keysPredict* kt) {
-	keysPredictDeleteAux(kt->first);
-	free(kt);
+	keysPredictDeleteAux(kt->first, kt);
+	free(kt->first);
 }
-void keysPredictDeleteAux(struct node* n) {
+
+void keysPredictDeleteAux(struct node* n, struct keysPredict* kt) {
 	struct node* current = n;
 	while (current) {
-		// Recursivamente eliminamos los nodos descendentes.
-		keysPredictDeleteAux(current->down);
+		keysPredictDeleteAux(current->down, kt);
+		current->down = NULL;
+		struct node* temp = current->next;
 		
-		// Contamos las palabras que tiene este nodo.
-		int cont = 0;
-		struct node* temp = current;
-		while (temp) {
-			if (temp->word) {
-				cont++;
-			}
-			temp = temp->next;
+		if (current->end) {
+			printf("Eliminando palabra: %s, End: %d\n", current->word, current->end);
+			free(current->word);
+			kt->totalWords--;
 		}
-		
-		// Si hay palabras, se crea un arreglo de palabras para eliminar.
-		if (cont > 0) {
-			char** words = (char**)malloc(cont * sizeof(char*));
-			int index = 0;
-			
-			// Rellenamos el arreglo con las palabras para eliminar.
-			temp = current;
-			while (temp) {
-				if (temp->word) {
-					words[index++] = temp->word;
-				}
-				temp = temp->next;
-			}
-			
-			// Eliminamos las palabras usando la función `deleteArrayOfWords`.
-			deleteArrayOfWords(words, cont);
-		}
-		
-		// Guardamos el puntero al siguiente antes de liberar el nodo actual.
-		struct node* next = current->next;
+		printf("Eliminando nodo: %c, End: %d\n", current->character, current->end);
 		free(current);
-		current = next;
+		kt->totalKeys--;
+		current = temp;
 	}
 }
 

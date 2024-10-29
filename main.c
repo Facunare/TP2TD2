@@ -70,14 +70,13 @@ int main() {
 	
     // keysPredict
     struct keysPredict* kt = keysPredictNew();
-    
+    keysPredictPrint(kt);
    // keysPredictAddWord 
 	keysPredictAddWord(kt, "");
     keysPredictAddWord(kt, "a"); 
     keysPredictAddWord(kt, "ala");
 	keysPredictAddWord(kt, "ale");
 	keysPredictAddWord(kt, "bar");
-	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "la");
 	keysPredictAddWord(kt, "lo");
@@ -92,6 +91,8 @@ int main() {
 	keysPredictAddWord(kt, "papalos");
 	keysPredictAddWord(kt, "australopitecus");
 	keysPredictPrint(kt);
+
+	
 	
 	keysPredictFind(kt, "papas"); // comprobar si esta la palabra antes de ser eliminada
 	
@@ -114,12 +115,14 @@ int main() {
 	keysPredictFind(kt, "river");
 	
 	// keysPredictRun	
-	int words = 0;
-	char** found = keysPredictRun(kt, "a", &words);
-	printf("%i\n", words);
-	for(int i=0; i<words; i++) {
-		printf("%s\n", found[i]);
+	int wordsCount = 0;
+	char** words = keysPredictRun(kt, "a", &wordsCount);
+	printf("%i\n", wordsCount);
+	for(int i=0; i<wordsCount; i++) {
+		printf("%s\n", words[i]);
 	}
+	
+	deleteArrayOfWords(words, wordsCount);
 	
 
 	// keysPredictListAll
@@ -128,9 +131,14 @@ int main() {
 	printf("%i\n", wordsCount3);
 	for(int i=0; i<wordsCount3; i++) {
 		printf("%s\n", words3[i]);
-	}
+	}
+	
+	deleteArrayOfWords(words3, wordsCount3);
+
+	
+
 	// keysPredict con una sola palabra
-	struct keysPredict* kt2 = keysPredictNew();
+	/*struct keysPredict* kt2 = keysPredictNew();
 	keysPredictAddWord(kt2, "hola");
 	keysPredictAddWord(kt2, "hola");
 	int wordsCount4 = 0;
@@ -139,17 +147,13 @@ int main() {
 	for(int i=0; i<wordsCount4; i++) {
 		printf("%s\n", words4[i]);
 	}
+	
+	deleteArrayOfWords(words4, wordsCount4);*/
+	
+	
+	
+	
 	/*
-	keysPredictPrint(kt2);
-    /*
-	keysPredictDelete(kt);
-	printf("===\n");
-	keysPredictPrint(kt);
-	
-	printf("===\n");
-	
-	
-	
     // keysPredict - encontrar palabras
     findAndPrintAll(kt, "papa");
     findAndPrintAll(kt, "pata");
