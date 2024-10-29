@@ -57,6 +57,9 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 		
 		// si es el ultimo caracter, crea la palabra.
 		if(index_palabra == strLen(word)-1){
+			if(founded->end){
+				return NULL;
+			}
 			founded->word = strDup(word);
 			founded->end = 1;
 		}
@@ -71,32 +74,35 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 
 // keysPredictRemoveWord se encarga de borrar una palabra de la estructura kt.
 void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
-
-	int index_palabra = 0;
-	struct node** pp = &(kt->first);
-	
-	// navega hasta el ultimo caracter de la palabra
-	while(word[index_palabra] != NULL){
-		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
-		// si llego al final de la palabra, la borra.
-		if((strLen(word)-1)==index_palabra && founded->end == 1){
-			free(founded->word);
-			founded->word = 0;
-			// preguntar si hay que hacer free(founded->word) o founded->word = 0;
-			founded->end = 0;
-			kt->totalWords--;
+	if(kt->first != NULL){
+		int index_palabra = 0;
+		struct node** pp = &(kt->first);
+		
+		// navega hasta el ultimo caracter de la palabra
+		while(word[index_palabra] != NULL){
+			struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+			// si llego al final de la palabra, la borra.
+			if((strLen(word)-1)==index_palabra && founded->end == 1){
+				free(founded->word);
+				founded->word = 0;
+				founded->end = 0;
+				kt->totalWords--;
+			}
+			
+			pp = &(founded->down);
+			index_palabra++;
 		}
 		
-		pp = &(founded->down);
-		index_palabra++;
 	}
-	
+
 }
 
 // keysPredictFind se encarga de encontrar una palabra en la estructura kt.
 // retorna NULL si no la encuentra; si la encuentra retorno el puntero al nodo.
 struct node* keysPredictFind(struct keysPredict* kt, char* word) {
-	
+	if(kt == NULL){
+		return NULL;
+	}
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
 
@@ -131,7 +137,9 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 
 // keysPredictRun retorna un arreglo de strings con todas las palabras comenzadas por un prefijo especifico.
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {
-	
+	if(kt->first == NULL){
+		return NULL;
+	}
 	int index_palabra = 0;
 	struct node** pp = &(kt->first);
 	struct node* founded = 0;
@@ -203,15 +211,16 @@ char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
 
 void keysPredictDelete(struct keysPredict* kt) {
 	keysPredictDeleteAux(kt->first, kt);
-	free(kt->first);
+	kt->first = NULL; // Asegurar que el puntero principal deja de apuntar a datos liberados.
 }
 
 void keysPredictDeleteAux(struct node* n, struct keysPredict* kt) {
 	struct node* current = n;
 	while (current) {
-		keysPredictDeleteAux(current->down, kt);
-		current->down = NULL;
 		struct node* temp = current->next;
+		keysPredictDeleteAux(current->down, kt);
+		
+		current->down = NULL;
 		
 		if (current->end) {
 			printf("Eliminando palabra: %s, End: %d\n", current->word, current->end);

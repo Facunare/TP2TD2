@@ -48,35 +48,36 @@ int main() {
     printf("\n");
 	char* dupVacio = strDup("");
 	printf("strDup(\"\") -> \"%s\"\n", dupVacio);
-	free(dup);
+	free(dupVacio);
 	printf("\n");
 	char* dupUnCaracter = strDup("h");
 	printf("strDup(\"h\") -> \"%s\"\n", dupUnCaracter);
-	free(dup);
+	free(dupUnCaracter);
 	printf("\n");
 	char* dupAlfanumerico = strDup("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	printf("strDup(\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") -> \"%s\"\n", dupAlfanumerico);
-	free(dup);
+	free(dupAlfanumerico);
 	printf("\n");
 	char* dupConEspacios = strDup(" a b");
 	printf("strDup(\" a b\") -> \"%s\"\n", dupConEspacios);
-	free(dup);
+	free(dupConEspacios);
 	printf("\n");
 	char* dupCharsEspeciales = strDup("a!b!");
 	printf("strDup(\"a!b!\") -> \"%s\"\n", dupCharsEspeciales);
-	free(dup);
+	free(dupCharsEspeciales);
 	printf("\n");
 	
 	
     // keysPredict
     struct keysPredict* kt = keysPredictNew();
-    keysPredictPrint(kt);
+   
    // keysPredictAddWord 
 	keysPredictAddWord(kt, "");
     keysPredictAddWord(kt, "a"); 
     keysPredictAddWord(kt, "ala");
 	keysPredictAddWord(kt, "ale");
 	keysPredictAddWord(kt, "bar");
+	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "casa");
 	keysPredictAddWord(kt, "la");
 	keysPredictAddWord(kt, "lo");
@@ -91,7 +92,6 @@ int main() {
 	keysPredictAddWord(kt, "papalos");
 	keysPredictAddWord(kt, "australopitecus");
 	keysPredictPrint(kt);
-
 	
 	
 	keysPredictFind(kt, "papas"); // comprobar si esta la palabra antes de ser eliminada
@@ -138,7 +138,7 @@ int main() {
 	
 
 	// keysPredict con una sola palabra
-	/*struct keysPredict* kt2 = keysPredictNew();
+	struct keysPredict* kt2 = keysPredictNew();
 	keysPredictAddWord(kt2, "hola");
 	keysPredictAddWord(kt2, "hola");
 	int wordsCount4 = 0;
@@ -148,7 +148,7 @@ int main() {
 		printf("%s\n", words4[i]);
 	}
 	
-	deleteArrayOfWords(words4, wordsCount4);*/
+	deleteArrayOfWords(words4, wordsCount4);
 	
 	
 	
