@@ -219,8 +219,9 @@ char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
 // keysPredictDelete se encarga de eliminar recursivamente toda la estructura keysPredict, nodo por nodo.
 void keysPredictDelete(struct keysPredict* kt) {
 	keysPredictDeleteAux(kt->first, kt);
-	free(kt->first);
 	kt->first = NULL;
+	free(kt->first);
+	
 }
 
 // keysPredictDeleteAux es una funcion auxiliar que se encarga de recorrer toda la estructura recursivamente eliminando cada nodo del kt

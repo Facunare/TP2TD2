@@ -485,7 +485,15 @@ int main() {
 	}
 	deleteArrayOfWords(words14, wordsCount14);
 	
+	keysPredictDelete(kt);
+	keysPredictDelete(kt2);
+	keysPredictDelete(kt3);
+	keysPredictDelete(kt4);
 	
+	keysPredictPrint(kt);
+	keysPredictPrint(kt2);
+	keysPredictPrint(kt3);
+	keysPredictPrint(kt4);
 	// keysPredict - encontrar palabras
 	/*findAndPrintAll(kt, "papa");
 	findAndPrintAll(kt, "pata");
