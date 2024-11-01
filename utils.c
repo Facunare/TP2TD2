@@ -81,6 +81,9 @@ void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
 		// navega hasta el ultimo caracter de la palabra
 		while(word[index_palabra] != NULL){
 			struct node* founded = findNodeInLevel(pp, word[index_palabra]);
+			if(founded==NULL){
+				return NULL;
+			}
 			// si llego al final de la palabra, la borra.
 			if((strLen(word)-1)==index_palabra && founded->end == 1){
 				free(founded->word);
@@ -147,9 +150,13 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 	// navegar hasta el nodo correspondiente al ultimo caracter del prefijo.
 	while(partialWord[index_palabra] != NULL){
 		founded = findNodeInLevel(pp, partialWord[index_palabra]);
-		pp = &(founded->down);
-		index_palabra++;
-		
+		if(founded==NULL){
+			return NULL;
+		}else{
+			pp = &(founded->down);
+			index_palabra++;
+		}
+
 	}
 	
 	// comprueba si el prefijo es una palabra
@@ -209,29 +216,38 @@ char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
 	return foundWords;
 }
 
+// keysPredictDelete se encarga de eliminar recursivamente toda la estructura keysPredict, nodo por nodo.
 void keysPredictDelete(struct keysPredict* kt) {
 	keysPredictDeleteAux(kt->first, kt);
-	kt->first = NULL; // Asegurar que el puntero principal deja de apuntar a datos liberados.
+	free(kt->first);
+	kt->first = NULL;
 }
 
+// keysPredictDeleteAux es una funcion auxiliar que se encarga de recorrer toda la estructura recursivamente eliminando cada nodo del kt
+// (si es un nodo correspondiente a una palabra, eliminar la misma)
 void keysPredictDeleteAux(struct node* n, struct keysPredict* kt) {
+	if(!n) return;
 	struct node* current = n;
 	while (current) {
 		struct node* temp = current->next;
 		keysPredictDeleteAux(current->down, kt);
-		
+	
 		current->down = NULL;
-		
+		// si es una palabra, eliminarla.
 		if (current->end) {
 			printf("Eliminando palabra: %s, End: %d\n", current->word, current->end);
 			free(current->word);
 			kt->totalWords--;
 		}
 		printf("Eliminando nodo: %c, End: %d\n", current->character, current->end);
+		// elimina el nodo
+		current->next = NULL;
 		free(current);
+		
 		kt->totalKeys--;
 		current = temp;
 	}
+
 }
 
 void keysPredictPrint(struct keysPredict* kt) {
