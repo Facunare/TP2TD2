@@ -19,11 +19,11 @@ current_source=main.c
 path_char=\
 [source]
 path=main.c
-cursor=497:21
+cursor=16:62
 open=true
 [source]
 path=utils.c
-cursor=221:18
+cursor=118:36
 open=true
 [header]
 path=utils.h

@@ -1,6 +1,6 @@
 #include "utils.h"
 
-// strLen devuelve la longitud total de una cadena de caracteres 
+// strLen devuelve la longitud total de una cadena de caracteres.
 int strLen(char* src) {
 	int contador = 0;
 	
@@ -25,7 +25,7 @@ char* strDup(char* src) {
 	return copia;
 }
 
-// Keys Predict
+// KeysPredictNew genera una nueva estructura keysPredict.
 
 struct keysPredict* keysPredictNew() {
     struct keysPredict* kt = (struct keysPredict*)malloc(sizeof(struct keysPredict));
@@ -35,7 +35,7 @@ struct keysPredict* keysPredictNew() {
     return kt;
 }
 
-// keysPredictAddWord agrega una nueva palabra a la estructura kt
+// keysPredictAddWord agrega una nueva palabra a la estructura keysPredict
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
 	
 	// chequea que no sea una cadena vacia.
@@ -66,9 +66,7 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 		
 		pp = &(founded->down);
 		index_palabra++;
-		
 	}
-	
 	kt->totalWords++;
 }
 
@@ -86,18 +84,16 @@ void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
 			}
 			// si llego al final de la palabra, la borra.
 			if((strLen(word)-1)==index_palabra && founded->end == 1){
-				free(founded->word);
 				founded->word = 0;
 				founded->end = 0;
+				free(founded->word);
 				kt->totalWords--;
 			}
 			
 			pp = &(founded->down);
 			index_palabra++;
 		}
-		
 	}
-
 }
 
 // keysPredictFind se encarga de encontrar una palabra en la estructura kt.
@@ -113,34 +109,34 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
 	while(word[index_palabra] != NULL){
 		struct node* founded = findNodeInLevel(pp, word[index_palabra]);
 		
-		// si no se encuentre ALGUN caracter, no se encontró la palabra. Caso contrario, devuelve el puntero. 
+		// si no se encuentre ALGUN caracter, no se encontró la palabra, devuelve NULL. Caso contrario, devuelve el puntero. 
 		if(founded==NULL){
-			return 0;
+			return NULL;
 		}else{
 			int equal = 1;
 			if(founded->end == 1){
 				// compara la palabra del nodo con la pasada por parametro
-				for(int i = 0; i<strLen(word); i++){
+				for(int i = 0; i<strLen(word) || i<strLen(founded->word); i++){
 					if(founded->word[i] != word[i]){
 						equal = 0;
 					}
 				}
+				
+				// si son iguales retorna el puntero
 				if(equal==1){
 					return founded;	
 				}				
 			}
 		}
-		
 		pp = &(founded->down);
 		index_palabra++;
 	}
-	
 }
 
 
 // keysPredictRun retorna un arreglo de strings con todas las palabras comenzadas por un prefijo especifico.
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {
-	if(kt->first == NULL){
+	if(kt->first == NULL || strLen(partialWord) == NULL){
 		return NULL;
 	}
 	int index_palabra = 0;
@@ -180,7 +176,8 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 	return foundWords;
 }
 
-// keysPredictCountWordAux es una funcion recursiva que se encarga de contar palabras
+// keysPredictCountWordAux es una funcion recursiva que cuenta el numero de palabras o inserta las palabras 
+// encontradas en el arreglo de strings, segun se especifique. 
 int keysPredictCountWordAux(struct node* n, int cont, char** foundWords) {
 	struct node* current = n;
 	
@@ -221,6 +218,7 @@ void keysPredictDelete(struct keysPredict* kt) {
 	keysPredictDeleteAux(kt->first, kt);
 	kt->first = NULL;
 	free(kt->first);
+	free(kt);
 	
 }
 
@@ -236,11 +234,9 @@ void keysPredictDeleteAux(struct node* n, struct keysPredict* kt) {
 		current->down = NULL;
 		// si es una palabra, eliminarla.
 		if (current->end) {
-			printf("Eliminando palabra: %s, End: %d\n", current->word, current->end);
 			free(current->word);
 			kt->totalWords--;
 		}
-		printf("Eliminando nodo: %c, End: %d\n", current->character, current->end);
 		// elimina el nodo
 		current->next = NULL;
 		free(current);
@@ -251,12 +247,17 @@ void keysPredictDeleteAux(struct node* n, struct keysPredict* kt) {
 
 }
 
+// keysPredictPrint imprime una vista jerarquica de todas las palabras almacenadas en
+// la estructura keysPredict, mostrando el caracter de cada nodo. 
+// Tambien muestra el total de llaves y palabras.
 void keysPredictPrint(struct keysPredict* kt) {
     printf("--- Predict --- Keys: %i Words: %i\n", kt->totalKeys, kt->totalWords);
     keysPredictPrintAux(kt->first, 0);
     printf("---\n");
 }
 
+// keysPredictPrintAux es una funcion recursiva que recorre cada nodo del keysPredict, y lo imprime
+// Si el nodo es el final de una palabra, el caracter se muestra entre corchetes.
 void keysPredictPrintAux(struct node* n, int level) {
     if(!n) return;
     struct node* current = n;
@@ -274,7 +275,8 @@ void keysPredictPrintAux(struct node* n, int level) {
 
 // Auxiliar functions
 
-// findNodeInLevel se encarga de comprobar si un nodo se encuentra presente en un nivel especifico
+// findNodeInLevel se encarga de comprobar si un nodo se encuentra presente en un nivel especifico del keysPredict
+// Si lo encuentra, retorna el puntero al mismo; caso contrario devuelve NULL.
 struct node* findNodeInLevel(struct node** list, char character) {
 	
 	// comprobar si la lista esta vacia
@@ -283,7 +285,7 @@ struct node* findNodeInLevel(struct node** list, char character) {
 		return NULL;
 	}
 	
-	// buscar el nodo pedido segun caracter
+	// buscar el nodo pedido segun el caracter especificado.
 	while(temp != NULL){
 		if(temp->character == character){
 			return temp;
@@ -294,7 +296,8 @@ struct node* findNodeInLevel(struct node** list, char character) {
 }
 
 // addSortedNewNodeInLevel se engarga de agregar un nodo en un nivel especifico segun orden alfabetico
-// (teniendo en cuenta el caso que el nodo sea el primero de la lista o si la lista se encontraba vacia)
+// Si la lista esta vacia o el nuevo nodo es el primero, lo coloca al inicio. En otros casos
+// lo inserta en la posicion correcta.
 struct node* addSortedNewNodeInLevel(struct node** list, char character){
 	
 	// creacion y seteo de nuevo nodo

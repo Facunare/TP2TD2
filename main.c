@@ -2,18 +2,19 @@
 #include <stdlib.h>
 #include "utils.h"
 
-void predictAndPrintAll(struct keysPredict* kt, char* partialWord ) {
-	char** words;
-	int wordsCount;
-	words = keysPredictRun(kt, partialWord, &wordsCount);
+void predictAndPrintAll(struct keysPredict* kt, char* partialWord) {
+	int wordsCount = 0;
+	char** words = keysPredictRun(kt, partialWord, &wordsCount);
 	printf("Predicts: %s = ", partialWord);
-	for(int i=0; i<wordsCount; i++) {
+	for(int i = 0; i < wordsCount; i++) {
 		printf("%s,", words[i]);
 	}
 	printf("\n");
 	deleteArrayOfWords(words, wordsCount);
 }
 
+// findAndPrintAll imprime si una palabra se encuentra dentro del keysPredict
+// si la palabra existe, devuelve 0; si no existe, devuelve 1;
 void findAndPrintAll(struct keysPredict* kt, char* word ) {
 	struct node* result = keysPredictFind(kt, word);
 	printf("Find: %s = %i\n", word, result==0);
@@ -108,8 +109,7 @@ int main() {
 	printf("\n\nDiccionario 1.\n\n");
 	keysPredictPrint(kt);
 	
-	
-	keysPredictFind(kt, "papas"); // Comprobamos si está la palabra antes de ser eliminada
+	findAndPrintAll(kt, "papas"); // Comprobamos si está la palabra antes de ser eliminada
 	
 	// keysPredictRemoveWord
 	keysPredictRemoveWord(kt, "la");
@@ -123,26 +123,16 @@ int main() {
 	printf("\n-Borramos las palabras: 'la', 'lo', 'los', 'papa', 'papas'\n\n");
 	keysPredictPrint(kt);
 	
-	keysPredictFind(kt, "papas"); // Comprobamos si está la palabra después de ser eliminada
-	keysPredictFind(kt, "australopitecus");
-	keysPredictFind(kt, "patovica");
-	keysPredictFind(kt, "hola");
-	keysPredictFind(kt, "boca");
-	keysPredictFind(kt, "");
-	keysPredictFind(kt, "river");
+	findAndPrintAll(kt, "papas"); // Comprobamos si está la palabra después de ser eliminada
+	findAndPrintAll(kt, "australopitecus");
+	findAndPrintAll(kt, "patovica");
+	findAndPrintAll(kt, "hola");
+	findAndPrintAll(kt, "boca");
+	findAndPrintAll(kt, "");
+	findAndPrintAll(kt, "river");
 	
 	// keysPredictRun. Imprimimos la lista de palabras del Diccionario 1 que empiecen con "a"
-	int wordsCount = 0;
-	char** words = keysPredictRun(kt, "a", &wordsCount);
-	printf("\n-La cantidad de palabras de su diccionario (1) que empiezan con la letra 'a' son: %i\n", wordsCount);
-	printf("Estas son: \n\n");
-	
-	for(int i=0; i<wordsCount; i++) {
-		printf("%s\n", words[i]);
-	}
-	
-	deleteArrayOfWords(words, wordsCount);
-	
+	predictAndPrintAll(kt,"a");
 	
 	// keysPredictListAll. Imprimimos la lista de palabras del Diccionario 1
 	int wordsCount3 = 0;
@@ -183,8 +173,6 @@ int main() {
 	keysPredictAddWord(kt3, "rinoceronte");
 	keysPredictAddWord(kt3, "casa");
 	keysPredictAddWord(kt3, "rino");
-	keysPredictAddWord(kt3, "celular");	//Agregamos "celular" como caso de test
-	keysPredictAddWord(kt3, "casamiento"); //Agregamos "casamiento" como caso de test
 	
 	
 	printf("\n\nDiccionario 3.\n\n");
@@ -213,55 +201,16 @@ int main() {
 	
 	
 	//Imprimimos la lista de palabras que empiecen con 'c'
-	int wordsCount6 = 0;
-	char** words6 = keysPredictRun(kt3, "c", &wordsCount6);
-	printf("\n-La cantidad de palabras de su diccionario (3) que empiezan con la letra 'c' son: %i\n", wordsCount6);
-	printf("Estas son: \n\n");
-	
-	for(int i=0; i<wordsCount6; i++) {
-		printf("%s\n", words6[i]);
-	}
-	
-	deleteArrayOfWords(words6, wordsCount6);
+	predictAndPrintAll(kt,"c");
 	
 	//Imprimimos la lista de palabras que empiecen con 'ca'
-	int wordsCount7 = 0;
-	char** words7 = keysPredictRun(kt3, "ca", &wordsCount7);
-	printf("\n-La cantidad de palabras de su diccionario (3) que empiezan con la letra 'ca' son: %i\n", wordsCount7);
-	printf("Estas son: \n\n");
-	
-	for(int i=0; i<wordsCount7; i++) {
-		printf("%s\n", words7[i]);
-	}
-	
-	deleteArrayOfWords(words7, wordsCount7);
+	predictAndPrintAll(kt,"ca");
 	
 	//Imprimimos la lista de palabras que empiecen con 'casa'
-	int wordsCount8 = 0;
-	char** words8 = keysPredictRun(kt3, "casa", &wordsCount8);
-	printf("\n-La cantidad de palabras de su diccionario (3) que empiezan con la letra 'casa' son: %i\n", wordsCount8);
-	printf("Estas son: \n\n");
-	
-	for(int i=0; i<wordsCount8; i++) {
-		printf("%s\n", words8[i]);
-	}
-	
-	deleteArrayOfWords(words8, wordsCount8);
+	predictAndPrintAll(kt,"casa");
 	
 	//Imprimimos la lista de palabras que empiecen con 'casas'
-	int wordsCount9 = 0;
-	char** words9 = keysPredictRun(kt3, "casas", &wordsCount9);
-	printf("\n-La cantidad de palabras de su diccionario (3) que empiezan con la letra 'casas' son: %i\n", wordsCount9);
-	if (wordsCount9==NULL){
-		printf("No se encontro la palabra\n");
-	}else{
-		printf("Estas son: \n\n");
-		for(int i=0; i<wordsCount9; i++) {
-			printf("%s\n", words9[i]);
-		}
-	}
-
-	deleteArrayOfWords(words9, wordsCount9);
+	predictAndPrintAll(kt,"casa");
 	
 	// Diccionario 4. keysPredict casos grandes
 	struct keysPredict* kt4 = keysPredictNew();
@@ -314,7 +263,7 @@ int main() {
 	keysPredictAddWord(kt4, "secador");
 	keysPredictAddWord(kt4, "sediento");
 	keysPredictAddWord(kt4, "seguro");
-	keysPredictAddWord(kt4, "señal");
+	keysPredictAddWord(kt4, "sediento");
 	keysPredictAddWord(kt4, "seleccion");
 	keysPredictAddWord(kt4, "secreto");
 	keysPredictAddWord(kt4, "semanal");
@@ -335,7 +284,7 @@ int main() {
 	keysPredictAddWord(kt4, "nivel");
 	keysPredictAddWord(kt4, "nieve");
 	keysPredictAddWord(kt4, "nido");
-	keysPredictAddWord(kt4, "niño");
+	keysPredictAddWord(kt4, "nil");
 	keysPredictAddWord(kt4, "ninguno");
 	keysPredictAddWord(kt4, "nivelar");
 	keysPredictAddWord(kt4, "nitrato");
@@ -426,7 +375,7 @@ int main() {
 	keysPredictRemoveWord(kt4, "secador");
 	keysPredictRemoveWord(kt4, "sediento");
 	keysPredictRemoveWord(kt4, "seguro");
-	keysPredictRemoveWord(kt4, "señal");
+	keysPredictRemoveWord(kt4, "sediento");
 	keysPredictRemoveWord(kt4, "seleccion");
 	keysPredictRemoveWord(kt4, "secreto");
 	keysPredictRemoveWord(kt4, "semanal");
@@ -435,89 +384,53 @@ int main() {
 	
 	keysPredictPrint(kt4);
 	
-	int wordsCount10 = 0;
-	char** words10 = keysPredictRun(kt4, "ca", &wordsCount10);
-	printf("\n-La cantidad de palabras de su diccionario (4) que empiezan con el prefijo 'ca' son: %i\n", wordsCount10);
+	predictAndPrintAll(kt4,"di");
+	predictAndPrintAll(kt4,"he");
+	predictAndPrintAll(kt4,"la");
+	predictAndPrintAll(kt4,"re");
+	predictAndPrintAll(kt4,"se");
+	predictAndPrintAll(kt4,"ca");
+	predictAndPrintAll(kt4,"ni");
+	predictAndPrintAll(kt4,"pa");
+	predictAndPrintAll(kt4,"ta");
+	predictAndPrintAll(kt4,"ve");
+	
+	// Algunos casos borde
+	predictAndPrintAll(kt4,""); // cadena vacia
+	predictAndPrintAll(kt4,"camarada"); // palabra=prefijo
+	predictAndPrintAll(kt4,"camaradas"); // prefijo que no existe
+	predictAndPrintAll(kt4,"z"); // prefijo de un caracter que no está
+	predictAndPrintAll(kt4,"v"); // prefijo en la "superficie" del kt
+	predictAndPrintAll(kt4,"ventan"); // prefijo en lo "profundo" del kt
+	
+	findAndPrintAll(kt4, "servicio");
+	findAndPrintAll(kt4, "ventanal");
+	findAndPrintAll(kt4, "");
+	findAndPrintAll(kt4, "ventanales");
+	findAndPrintAll(kt4, "v");
+	
+	// Diccionario 5. keysPredict vacio
+	struct keysPredict* kt5 = keysPredictNew();	// probar todo para un diccionario vacio
+	keysPredictPrint(kt5);
+	findAndPrintAll(kt5, "ventanal");
+	predictAndPrintAll(kt5,"ve");
+	int wordsCountVacio = 0;
+	char** wordsVacio = keysPredictListAll(kt5, &wordsCountVacio );
+	printf("\n-La cantidad de palabras de su diccionario (3) son: %i\n", wordsCountVacio );
 	printf("Estas son: \n\n");
-	
-	for(int i = 0; i < wordsCount10; i++) {
-		printf("%s\n", words10[i]);
+	for(int i=0; i<wordsCountVacio ; i++) {
+		printf("%s\n", wordsVacio[i]);
 	}
-	deleteArrayOfWords(words10, wordsCount10);
 	
-	int wordsCount11 = 0;
-	char** words11 = keysPredictRun(kt4, "ni", &wordsCount11);
-	printf("\n-La cantidad de palabras de su diccionario (4) que empiezan con el prefijo 'ni' son: %i\n", wordsCount11);
-	printf("Estas son: \n\n");
+	deleteArrayOfWords(wordsVacio, wordsCountVacio);
+	keysPredictDelete(kt5);
 	
-	for(int i = 0; i < wordsCount11; i++) {
-		printf("%s\n", words11[i]);
-	}
-	deleteArrayOfWords(words11, wordsCount11);
-	
-	int wordsCount12 = 0;
-	char** words12 = keysPredictRun(kt4, "pa", &wordsCount12);
-	printf("\n-La cantidad de palabras de su diccionario (4) que empiezan con el prefijo 'pa' son: %i\n", wordsCount12);
-	printf("Estas son: \n\n");
-	
-	for(int i = 0; i < wordsCount12; i++) {
-		printf("%s\n", words12[i]);
-	}
-	deleteArrayOfWords(words12, wordsCount12);
-	
-	int wordsCount13 = 0;
-	char** words13 = keysPredictRun(kt4, "ta", &wordsCount13);
-	printf("\n-La cantidad de palabras de su diccionario (4) que empiezan con el prefijo 'ta' son: %i\n", wordsCount13);
-	printf("Estas son: \n\n");
-	
-	for(int i = 0; i < wordsCount13; i++) {
-		printf("%s\n", words13[i]);
-	}
-	deleteArrayOfWords(words13, wordsCount13);
-	
-	int wordsCount14 = 0;
-	char** words14 = keysPredictRun(kt4, "ve", &wordsCount14);
-	printf("\n-La cantidad de palabras de su diccionario (4) que empiezan con el prefijo 've' son: %i\n", wordsCount14);
-	printf("Estas son: \n\n");
-	
-	for(int i = 0; i < wordsCount14; i++) {
-		printf("%s\n", words14[i]);
-	}
-	deleteArrayOfWords(words14, wordsCount14);
 	
 	keysPredictDelete(kt);
 	keysPredictDelete(kt2);
 	keysPredictDelete(kt3);
 	keysPredictDelete(kt4);
-	
-	keysPredictPrint(kt);
-	keysPredictPrint(kt2);
-	keysPredictPrint(kt3);
-	keysPredictPrint(kt4);
-	// keysPredict - encontrar palabras
-	/*findAndPrintAll(kt, "papa");
-	findAndPrintAll(kt, "pata");
-	findAndPrintAll(kt, "a");
-	findAndPrintAll(kt, "zazz");
-	
-	// keysPredict - predecir palabras
-	predictAndPrintAll(kt,"or");
-	predictAndPrintAll(kt,"ab");
-	predictAndPrintAll(kt,"pa");
-	predictAndPrintAll(kt,"pap");
-	predictAndPrintAll(kt,"q");
-	predictAndPrintAll(kt,"zap");
-	
-	// keysPredict - predecir palabras
-	keysPredictRemoveWord(kt,"");
-	keysPredictRemoveWord(kt,"zaz");
-	keysPredictRemoveWord(kt,"aaa");
-	keysPredictRemoveWord(kt,"papa");
-	keysPredictRemoveWord(kt,"pata");
-	keysPredictPrint(kt);
-	
-	// keysPredict - borrar diccionario
-	keysPredictDelete(kt);*/
-	
+
+
 	return 0;
 }
